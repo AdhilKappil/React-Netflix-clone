@@ -1,26 +1,36 @@
+import { useEffect, useState } from 'react'
+import './Baner.css'
+import axios from '../../axios';
+import { API_KEY ,imageUrl} from '../../Constants/constants'
 
 
 function Baner() {
-    return (
-        <div className="banner flex items-center justify-between">
-            <div className="flex space-x-4">
-                <ul className="flex space-x-4 list-none">
-                <div className="p-10">
-                </div>
-                    <li>Home</li>
-                    <li>TV Shows</li>
-                    <li>Movies</li>
-                    <li>News & Popular</li>
-                    <li>My list</li>
-                    <li>Browse by Languges</li>
-                </ul>
-                <div>
-                    
-                </div>
-            </div>
-            <div></div>
+
+  const [movie, setMovie] = useState()
+
+  useEffect(() => {
+    axios.get(`https://api.themoviedb.org/3/trending/all/week?api_key=${API_KEY}&language=en-US`).then((response) => {
+        setMovie(response.data.results[0])
+    })
+  }, [])
+
+  return (
+
+    <div
+     style={{ backgroundImage:`url(${movie?imageUrl+movie.backdrop_path:''})`}}
+      className='banner'>
+      <div className='content' >
+        <h1 className='title'>{movie? movie.title : ''}</h1>
+        <div className='banner_buttons' >
+          <button className='button' >Play</button>
+          <button className='button' >More infor</button>
         </div>
-    )
+        {/* <h1 className='description'>{movie?movie.overview:''}</h1> */}
+      </div>
+      <div className="fade_bottom"></div>
+    </div>
+
+  )
 }
 
 export default Baner
